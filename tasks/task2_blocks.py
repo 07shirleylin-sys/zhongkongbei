@@ -13,5 +13,8 @@ def run_task2(ctx: RuntimeContext) -> tuple[bool, str]:
     4. 对每个物体执行：预抓取 -> 下降 -> 灵巧手抓取 -> 抬升 -> 放置 -> 释放。
     5. 保持放置姿态与槽内姿态一致。
     """
-    del ctx
+    ctx.log("task2", "started")
+    if ctx.dry_run:
+        ctx.log("task2", "dry-run finished")
+        return True, "task2 dry-run ok"
     return False, "task2 not implemented"

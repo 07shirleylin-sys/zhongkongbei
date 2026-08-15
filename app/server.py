@@ -48,7 +48,30 @@ class ContestantRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         if self.path == "/api/health":
-            self._send_json(HTTPStatus.OK, {"success": True, "message": "ready"})
+            context = self.algorithm_server.context
+            self._send_json(
+                HTTPStatus.OK,
+                {
+                    "success": True,
+                    "message": "ready",
+                    "dryRun": context.dry_run,
+                    "endpoints": sorted(TASK_ROUTES),
+                },
+            )
+            return
+        if self.path == "/api/config/summary":
+            context = self.algorithm_server.context
+            self._send_json(
+                HTTPStatus.OK,
+                {
+                    "success": True,
+                    "dryRun": context.dry_run,
+                    "arm": context.config["hardware"]["arm"]["base_url"],
+                    "hand": context.config["hardware"]["hand"]["base_url"],
+                    "camera": context.config["hardware"]["camera"].get("name", ""),
+                    "logDir": str(context.log_dir),
+                },
+            )
             return
         self._send_json(HTTPStatus.NOT_FOUND, {"success": False, "message": f"unknown path: {self.path}"})
 
@@ -63,12 +86,21 @@ class ContestantRequestHandler(BaseHTTPRequestHandler):
 
         started_at = time.perf_counter()
         try:
+            self.algorithm_server.context.log("server", "task request started", path=self.path)
             ok, message = runner(self.algorithm_server.context)
         except Exception as error:
             traceback.print_exc()
             ok, message = False, f"{type(error).__name__}: {error}"
 
         elapsed_ms = round((time.perf_counter() - started_at) * 1000)
+        self.algorithm_server.context.log(
+            "server",
+            "task request finished",
+            path=self.path,
+            success=bool(ok),
+            result_message=message,
+            elapsed_ms=elapsed_ms,
+        )
         self._send_json(
             HTTPStatus.OK,
             {"success": bool(ok), "message": message, "elapsedMs": elapsed_ms},
@@ -142,6 +174,7 @@ def main() -> int:
     print("  POST /api/task2/execute")
     print("  POST /api/task3/execute")
     print(f"Config: {args.config}")
+    print(f"Dry run: {context.dry_run}")
     print("=" * 64, flush=True)
     try:
         server.serve_forever(poll_interval=0.2)

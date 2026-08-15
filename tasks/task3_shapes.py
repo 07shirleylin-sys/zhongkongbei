@@ -12,5 +12,8 @@ def run_task3(ctx: RuntimeContext) -> tuple[bool, str]:
     3. 查 config["tasks"]["task3"]["slots"] 中对应槽位。
     4. 抓取、抬升、移动、校正姿态、放置。
     """
-    del ctx
+    ctx.log("task3", "started")
+    if ctx.dry_run:
+        ctx.log("task3", "dry-run finished")
+        return True, "task3 dry-run ok"
     return False, "task3 not implemented"

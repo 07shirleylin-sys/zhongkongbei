@@ -13,5 +13,8 @@ def run_task1(ctx: RuntimeContext) -> tuple[bool, str]:
     4. 设置灵巧手点按/拨动手势。
     5. 机械臂执行预位 -> 接触位 -> 撤离位。
     """
-    del ctx
+    ctx.log("task1", "started")
+    if ctx.dry_run:
+        ctx.log("task1", "dry-run finished")
+        return True, "task1 dry-run ok"
     return False, "task1 not implemented"
