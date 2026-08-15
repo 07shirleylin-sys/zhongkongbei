@@ -1,0 +1,1 @@
+"""Contestant algorithm service package."""

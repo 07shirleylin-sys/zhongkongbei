@@ -1,0 +1,55 @@
+{
+  "service": {
+    "host": "0.0.0.0",
+    "port": 5000
+  },
+  "hardware": {
+    "arm": {
+      "base_url": "http://127.0.0.1:8087",
+      "arm": "right",
+      "timeout_sec": 90
+    },
+    "hand": {
+      "base_url": "http://127.0.0.1:8088",
+      "poses": {
+        "open": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "half": [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+        "box_grip": [0.5, 0.5, 0.15, 0.5, 0.15, 0.15, 0.5, 0.15, 0.5, 0.15],
+        "press": [0.5, 0.5, 0.0, 0.5, 0.0, 1, 1, 1, 1, 1]
+      }
+    },
+    "camera": {
+      "name": "Gemini335",
+      "serial": "",
+      "save_debug_images": true
+    }
+  },
+  "motion": {
+    "safe_velocity": 0.08,
+    "normal_velocity": 0.12,
+    "safe_home": {
+      "x": 0.275,
+      "y": -0.16,
+      "z": 0.50,
+      "roll": -3.141,
+      "pitch": -1.552,
+      "yaw": 3.141
+    }
+  },
+  "tasks": {
+    "task1": {
+      "photo_pose": null,
+      "switch_targets": {}
+    },
+    "task2": {
+      "photo_pose": null,
+      "source_slots": {},
+      "place_area": {}
+    },
+    "task3": {
+      "photo_pose": null,
+      "source_area": {},
+      "slots": {}
+    }
+  }
+}
