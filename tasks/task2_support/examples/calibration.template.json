@@ -1,0 +1,16 @@
+{
+  "_warning": "Schema only. Replace every null value with data measured from the real camera and calibration procedure.",
+  "intrinsics": {
+    "width": null,
+    "height": null,
+    "fx": null,
+    "fy": null,
+    "cx": null,
+    "cy": null,
+    "depth_scale": null,
+    "distortion": []
+  },
+  "extrinsics": {
+    "camera_to_robot": null
+  }
+}

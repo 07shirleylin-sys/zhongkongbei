@@ -1,0 +1,68 @@
+{
+  "_warning": "All null values must be measured and replaced on site before dry_run is disabled.",
+  "tasks": {
+    "task2": {
+      "approach_height_m": 0.05,
+      "lift_height_m": 0.06,
+      "min_confidence": 0.8,
+      "photo_pose": {
+        "x": null,
+        "y": null,
+        "z": null,
+        "roll": null,
+        "pitch": null,
+        "yaw": null
+      },
+      "source_slots": {
+        "slot_a": {
+          "grasp_pose": {
+            "x": null,
+            "y": null,
+            "z": null,
+            "roll": null,
+            "pitch": null,
+            "yaw": null
+          }
+        },
+        "slot_b": {
+          "grasp_pose": {
+            "x": null,
+            "y": null,
+            "z": null,
+            "roll": null,
+            "pitch": null,
+            "yaw": null
+          }
+        },
+        "slot_c": {
+          "grasp_pose": {
+            "x": null,
+            "y": null,
+            "z": null,
+            "roll": null,
+            "pitch": null,
+            "yaw": null
+          }
+        },
+        "slot_d": {
+          "grasp_pose": {
+            "x": null,
+            "y": null,
+            "z": null,
+            "roll": null,
+            "pitch": null,
+            "yaw": null
+          }
+        }
+      },
+      "place_area": {
+        "drop_points": [
+          {"x": null, "y": null, "z": null, "roll": null, "pitch": null, "yaw": null},
+          {"x": null, "y": null, "z": null, "roll": null, "pitch": null, "yaw": null},
+          {"x": null, "y": null, "z": null, "roll": null, "pitch": null, "yaw": null},
+          {"x": null, "y": null, "z": null, "roll": null, "pitch": null, "yaw": null}
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+# Offline calibration math and synthetic vision tests.
+numpy>=1.24
+
+# The camera SDK is installed separately from the official Orbbec package:
+# pyorbbecsdk2
