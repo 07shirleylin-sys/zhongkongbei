@@ -46,7 +46,35 @@
     "task2": {
       "photo_pose": null,
       "source_slots": {},
-      "place_area": {}
+      "place_area": {
+        "min_spacing_m": null
+      },
+      "approach_height_m": null,
+      "lift_height_m": null,
+      "min_confidence": 0.8,
+      "grip_pose_name": "box_grip",
+      "camera": {
+        "name": "Gemini335",
+        "serial": "",
+        "capture_dir": "captures/task2",
+        "calibration_path": "",
+        "align_depth_to_color": true,
+        "warmup_frames": 12,
+        "frame_timeout_ms": 1500
+      },
+      "vision": {
+        "coordinate_mode": "fixed_slot",
+        "digit_min_confidence": 0.8,
+        "slot_rois": {},
+        "default_orientation": null,
+        "slot_orientations": {},
+        "depth_sample_radius_px": 3,
+        "grasp_z_offset_m": null
+      },
+      "workspace": {
+        "bounds": {},
+        "safety_margin_m": null
+      }
     },
     "task3": {
       "photo_pose": null,

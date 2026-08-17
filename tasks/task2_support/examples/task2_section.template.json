@@ -2,9 +2,45 @@
   "_warning": "All null values must be measured and replaced on site before dry_run is disabled.",
   "tasks": {
     "task2": {
-      "approach_height_m": 0.05,
-      "lift_height_m": 0.06,
+      "approach_height_m": null,
+      "lift_height_m": null,
       "min_confidence": 0.8,
+      "grip_pose_name": "box_grip",
+      "camera": {
+        "name": "Gemini335",
+        "serial": "",
+        "capture_dir": "captures/task2",
+        "calibration_path": "",
+        "align_depth_to_color": true,
+        "warmup_frames": 12,
+        "frame_timeout_ms": 1500
+      },
+      "vision": {
+        "coordinate_mode": "fixed_slot",
+        "digit_min_confidence": 0.8,
+        "slot_rois": {
+          "slot_a": null,
+          "slot_b": null,
+          "slot_c": null,
+          "slot_d": null
+        },
+        "default_orientation": {
+          "roll": null,
+          "pitch": null,
+          "yaw": null
+        },
+        "slot_orientations": {},
+        "depth_sample_radius_px": 3,
+        "grasp_z_offset_m": null
+      },
+      "workspace": {
+        "bounds": {
+          "x": [null, null],
+          "y": [null, null],
+          "z": [null, null]
+        },
+        "safety_margin_m": null
+      },
       "photo_pose": {
         "x": null,
         "y": null,
@@ -56,6 +92,7 @@
         }
       },
       "place_area": {
+        "min_spacing_m": null,
         "drop_points": [
           {"x": null, "y": null, "z": null, "roll": null, "pitch": null, "yaw": null},
           {"x": null, "y": null, "z": null, "roll": null, "pitch": null, "yaw": null},

@@ -46,13 +46,19 @@ is suitable for this hardware-free development machine.
 }
 ```
 
-The task-specific detector then adds a `blocks` array. Each item must contain
+The task-specific detector adds a `blocks` array. Each item contains
 an integer `number` in 1..4, a unique `source_slot`, a confidence in 0..1, and
 optionally a robot-frame `center` or complete `grasp_pose`.
 
-The current task 2 executor accepts the enriched object directly, so the
-integrator can connect the shared SDK adapter and append `blocks` without
-changing motion planning.
+`tasks/task2_blocks.py` now invokes the task-2-only Orbbec adapter in
+`orbbec_camera.py`, passes the synchronized frame to `vision.py`, and then
+feeds the resulting `blocks` into the existing motion planner. The shared
+`hardware/camera_client.py` and the other two task entry points are untouched.
+
+`fixed_slot` is the recommended competition mode. It recognizes which number
+is in each fixed ROI, then uses the calibrated `source_slots.*.grasp_pose`.
+`depth_robot` is optional and may only be enabled after a complete
+camera-to-robot calibration has been validated.
 
 ## Calibration file and transform
 
@@ -93,15 +99,20 @@ real robot. On site:
 
 ## Offline tests
 
-The tests in `tasks/task2_support/test_support.py` use NumPy-only synthetic digits.
-They verify the fixed-slot digit contract and the pixel/depth coordinate math;
-they do not claim to simulate the proprietary camera or robot.
+The task 2 tests use NumPy-only synthetic digits and fake camera/robot clients.
+They verify fixed-slot recognition, depth coordinate math, all 24 number
+permutations, the four-block executor, workspace rejection, duplicate-call
+locking, and the Orbbec SDK contract. They do not claim to replace the final
+physical camera and robot validation.
 
 ```text
-python -B -m unittest tasks.task2_support.test_support -v
+python -B -m unittest tasks.task2_support.test_support tasks.task2_support.test_executor tasks.task2_support.test_orbbec_camera -v
 ```
 
 ## Field checklist
+
+Chinese final acceptance steps and the ten required task metrics are maintained in
+`tasks/task2_support/FIELD_FINAL_CHECKLIST_CN.md`.
 
 ```text
 [ ] SDK installer/wheel and viewer copied to USB

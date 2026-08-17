@@ -15,6 +15,35 @@ DIGIT_TEMPLATES: dict[int, tuple[str, ...]] = {
     4: ("00010", "00110", "01010", "10010", "11111", "00010", "00010"),
 }
 
+# Additional normalized variants from common sans-serif printed glyph shapes.
+# The field replay tool remains the final authority because the contest font is
+# unknown before arrival, but these variants avoid overfitting to one 5x7 font.
+DIGIT_TEMPLATE_VARIANTS: dict[int, tuple[tuple[str, ...], ...]] = {
+    1: (
+        DIGIT_TEMPLATES[1],
+        ("00001", "00111", "10011", "00011", "00011", "00011", "00011"),
+        ("00100", "11100", "00100", "00100", "00100", "00100", "11111"),
+    ),
+    2: (
+        DIGIT_TEMPLATES[2],
+        ("00100", "01000", "00001", "00010", "00100", "01000", "11111"),
+        ("00100", "00010", "00010", "00010", "00100", "01000", "11110"),
+        ("00100", "00010", "00010", "00010", "01000", "00000", "11111"),
+    ),
+    3: (
+        DIGIT_TEMPLATES[3],
+        ("00100", "00010", "00010", "00110", "00001", "00010", "00100"),
+        ("00100", "00010", "00010", "01110", "00001", "00010", "00100"),
+        ("00100", "00010", "00010", "01100", "00001", "00010", "01100"),
+    ),
+    4: (
+        DIGIT_TEMPLATES[4],
+        ("00010", "00110", "00010", "01010", "11111", "00010", "00010"),
+        ("00010", "00110", "00010", "01010", "11110", "00010", "00010"),
+        ("00010", "00010", "00110", "01010", "11111", "00010", "00010"),
+    ),
+}
+
 
 def render_digit(
     number: int,
@@ -53,10 +82,14 @@ def classify_digit(image: np.ndarray, *, min_confidence: float = 0.55) -> tuple[
     """Classify a fixed-slot grayscale crop against the four fixture templates."""
     normalized = _normalize_digit(image)
     scores: list[tuple[float, int]] = []
-    for number, rows in DIGIT_TEMPLATES.items():
-        template = np.array([[int(char) for char in row] for row in rows], dtype=np.uint8)
-        distance = float(np.mean(np.abs(normalized.astype(np.int16) - template.astype(np.int16))))
-        scores.append((distance, number))
+    for number, variants in DIGIT_TEMPLATE_VARIANTS.items():
+        distances = []
+        for rows in variants:
+            template = np.array([[int(char) for char in row] for row in rows], dtype=np.uint8)
+            distances.append(
+                float(np.mean(np.abs(normalized.astype(np.int16) - template.astype(np.int16))))
+            )
+        scores.append((min(distances), number))
     scores.sort()
     distance, number = scores[0]
     confidence = max(0.0, 1.0 - distance)
@@ -105,8 +138,11 @@ def _as_grayscale(image: np.ndarray) -> np.ndarray:
 
 def _normalize_digit(image: np.ndarray) -> np.ndarray:
     grayscale = _as_grayscale(image).astype(np.float32)
-    low = float(np.percentile(grayscale, 5))
-    high = float(np.percentile(grayscale, 95))
+    low = float(np.percentile(grayscale, 1))
+    high = float(np.percentile(grayscale, 99))
+    if high - low < 10:
+        low = float(np.min(grayscale))
+        high = float(np.max(grayscale))
     if high <= low:
         raise ValueError("digit crop has no usable contrast")
     mask = grayscale < (low + high) / 2.0
